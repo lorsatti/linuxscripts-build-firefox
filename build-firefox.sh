@@ -63,34 +63,34 @@
         rm firefox-$VERSION.tar.bz2
 
     # Move files to Debian package build directory
-        mkdir firefox-${VERSION}_${DEBARCH}
-        mkdir -p firefox-${VERSION}_${DEBARCH}/usr/share/applications
-        mkdir -p firefox-${VERSION}_${DEBARCH}/opt
-        mv firefox firefox-${VERSION}_${DEBARCH}/opt/firefox
+        mkdir firefox_${VERSION}_${DEBARCH}
+        mkdir -p firefox_${VERSION}_${DEBARCH}/usr/share/applications
+        mkdir -p firefox_${VERSION}_${DEBARCH}/opt
+        mv firefox firefox_${VERSION}_${DEBARCH}/opt/firefox
 
     # Create .deb package of Firefox
         clear
         echo "Preparing to build Firefox installation package ..."
-        mkdir firefox-${VERSION}_${DEBARCH}/DEBIAN
-        cp ./src/DEBIAN/* firefox-${VERSION}_${DEBARCH}/DEBIAN/
-        chmod +x firefox-${VERSION}_${DEBARCH}/DEBIAN/postinst
-        chmod +x firefox-${VERSION}_${DEBARCH}/DEBIAN/postrm
-        chmod 775 firefox-${VERSION}_${DEBARCH}/DEBIAN/*
+        mkdir firefox_${VERSION}_${DEBARCH}/DEBIAN
+        cp ./src/DEBIAN/* firefox_${VERSION}_${DEBARCH}/DEBIAN/
+        chmod +x firefox_${VERSION}_${DEBARCH}/DEBIAN/postinst
+        chmod +x firefox_${VERSION}_${DEBARCH}/DEBIAN/postrm
+        chmod 775 firefox_${VERSION}_${DEBARCH}/DEBIAN/*
 
-        printf "Architecture: $DEBARCH\n" | tee -a firefox-${VERSION}_${DEBARCH}/DEBIAN/control
-        printf "Version: 1:$VERSION+b0~mozilla\n" | tee -a firefox-${VERSION}_${DEBARCH}/DEBIAN/control
+        printf "Architecture: $DEBARCH\n" | tee -a firefox_${VERSION}_${DEBARCH}/DEBIAN/control
+        printf "Version: 1:$VERSION+b0~mozilla\n" | tee -a firefox_${VERSION}_${DEBARCH}/DEBIAN/control
 
-        printf "Installed-Size: " >> firefox-${VERSION}_${DEBARCH}/DEBIAN/control | du -sx --exclude DEBIAN firefox-${VERSION}_${DEBARCH} | tee -a firefox-${VERSION}_${DEBARCH}/DEBIAN/control
-        sed -i 's/firefox-'$VERSION'_'$DEBARCH'//g' firefox-${VERSION}_${DEBARCH}/DEBIAN/control
+        printf "Installed-Size: " >> firefox_${VERSION}_${DEBARCH}/DEBIAN/control | du -sx --exclude DEBIAN firefox_${VERSION}_${DEBARCH} | tee -a firefox_${VERSION}_${DEBARCH}/DEBIAN/control
+        sed -i 's/firefox_'$VERSION'_'$DEBARCH'//g' firefox_${VERSION}_${DEBARCH}/DEBIAN/control
 
-        cp ./src/launcher/firefox.desktop firefox-${VERSION}_${DEBARCH}/usr/share/applications/firefox.desktop
+        cp ./src/launcher/firefox.desktop firefox_${VERSION}_${DEBARCH}/usr/share/applications/firefox.desktop
     
-        cd firefox-${VERSION}_${DEBARCH}
+        cd firefox_${VERSION}_${DEBARCH}
         find . -type f ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P ' | xargs md5sum > DEBIAN/md5sums
         cd ..
 
-        dpkg-deb --build firefox-${VERSION}_${DEBARCH}
-        rm -rf firefox-${VERSION}_${DEBARCH}
+        dpkg-deb --build firefox_${VERSION}_${DEBARCH}
+        rm -rf firefox_${VERSION}_${DEBARCH}
 
     # If --install argument was passed, install the built .deb package
         while test $# -gt 0
@@ -99,7 +99,7 @@
                 --install) 
                 clear
                 echo "Installing Firefox $VERSION ..."
-                sudo dpkg -i firefox-${VERSION}_${DEBARCH}.deb
+                sudo dpkg -i firefox_${VERSION}_${DEBARCH}.deb
                 echo ""
                     ;;
             esac
